@@ -29,6 +29,7 @@
 </template>
 
 <script>
+  import badgeMix from '../../mixins/tabbar-badge.js'
 	export default {
 		data() {
 			return {
@@ -44,6 +45,7 @@
         scrollTop:0
 			};
 		},
+    mixins:[badgeMix],
     methods:{
       // 获取分类列表的方法
      async getCateList(){

@@ -56,7 +56,7 @@
 				this.inputValue = +val;
 			},
 			inputValue(newVal, oldVal) {
-				if (+newVal !== +oldVal) {
+				if (+newVal !== +oldVal && Number(newVal) && String(newVal).indexOf('.')===-1) {
 					this.$emit("change", newVal);
 				}
 			}
@@ -101,9 +101,12 @@
 				return scale;
 			},
 			_onBlur(event) {
-				let value = event.detail.value;
+        // 获取用户的输入内容
+				// let value = event.detail.value;
+        let value = parseInt(event.detail.value)
+        // 发现不合法
 				if (!value) {
-					// this.inputValue = 0;
+					this.inputValue = 1;
 					return;
 				}
 				value = +value;

@@ -37,6 +37,7 @@
 </template>
 
 <script>
+  import {mapState,mapMutations,mapGetters} from 'vuex'
 	export default {
 		data() {
 			return {
@@ -52,6 +53,7 @@
         		}, {
         			icon: 'cart',
         			text: '购物车',
+              info:0
         		}],
         	    buttonGroup: [{
         	      text: '加入购物车',
@@ -69,6 +71,8 @@
 		},
     // methods
     methods:{
+      // 将 m_cart模块的添加商品至购物车的方法导入
+      ...mapMutations('m_cart',['addToCart']),
       // 获取商品详情页信息
      async getGoodsDetail(goods_id){
         let result= await   uni.$http.get('/api/public/v1/goods/detail',{goods_id})
@@ -98,7 +102,20 @@
      },
       // 响应右侧两个按钮的点击事件
       buttonClick(e) {
-      	    console.log(e)
+        // 如果点击的是加入购物车
+        if(e.content.text=="加入购物车"){
+            // 将当前商品对象进行包装
+            const goods={
+              goods_id:this.goods_info.goods_id,
+              goods_name:this.goods_info.goods_name,
+              goods_price:this.goods_info.goods_price,
+              goods_count:1,
+              goods_small_logo:this.goods_info.goods_small_logo,
+              goods_state:true,
+            };
+            // 将商品加入购物车
+           this.addToCart(goods)
+        }
     }
       // ...
     },
@@ -108,6 +125,29 @@
       const goods_id=options.goods_id;
       // 发起网络请求
       this.getGoodsDetail(goods_id);
+    },
+    // computed
+    computed:{
+      ...mapState('m_cart',[]),
+      ...mapGetters('m_cart',['total'])
+    },
+    // watch
+    watch:{
+      total:{
+        handler(newV){
+          let findResult = this.options.find((item) => {
+             return item.text=="购物车"
+           });
+          findResult.info=newV
+        },
+        immediate:true
+      }
+      // total(newV){
+      //  let findResult = this.options.find((item) => {
+      //     return item.text=="购物车"
+      //   });
+      //  findResult.info=newV
+      // }
     }
 	}
 </script>

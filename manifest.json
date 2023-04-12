@@ -45,7 +45,15 @@
         "appid" : "wxb7a15e7c20ac251c",
         "setting" : {
             "urlCheck" : true,
-            "checkSiteMap":false
+            "checkSiteMap" : false
+        },
+        "requiredPrivateInfos":[
+          "chooseAddress"
+        ],
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : ""
+            }
         }
     }
 }
