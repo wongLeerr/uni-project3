@@ -4,6 +4,8 @@ import App from './App'
 import { $http } from "@escook/request-miniprogram"
 // 将网络请求的对象挂载到顶级对象uni身上
 uni.$http=$http
+// 导入store
+import store from './store/store.js'
 // 设置请求的根路径
 $http.baseUrl='https://www.uinav.com'
 // 配置请求拦截器
@@ -11,7 +13,13 @@ $http.beforeRequest=function(options){
   // 开启loading
   uni.showLoading({
     title:"数据加载中...",
-  })
+  });
+  // 根据判断是否进行登录给请求头加token
+ if(options.url.indexOf('/my/')!==-1){
+   options.header={
+     Authorization:store.state.m_user.token
+   }
+ } 
 }
 // 配置响应拦截器
 $http.afterRequest=function(){
@@ -26,8 +34,6 @@ uni.$showMsg=function(title="数据加载失败!",duration=1500){
     icon:'none'
   })
 }
-// 导入store
-import store from './store/store.js'
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
